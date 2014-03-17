@@ -1,0 +1,37 @@
+nQuake2 for Linux
+=================
+To install nQuake2, locate the installer tarball (nquake2vXX_installer-linux.tar.gz
+where XX is a number) and extract it.
+
+
+$ tar xvzf nquake2v10_installer-linux.tar.gz
+
+
+Once you have extracted the package, change directory to the folder that was
+created (same as the package but without .tar.gz), run the install script and
+follow the instructions. You can use tab to auto-complete the folder name here
+as well.
+
+
+$ cd nquake2v10_installer-linux/
+$ ./install_nquake.sh
+
+
+After choosing what mirror to use for downloading, simply sit back and enjoy
+a sweet cup of coffee or a glass of orange juice while nQuake2 downloads and
+installs all the components needed to play Quake 2.
+
+After installation has completed, start Quake 2 by changing directory to
+where you chose to install nQuake2, and run q2pro.glx.
+
+
+$ cd ~/nquake/
+$ ./ezquake-gl.glx
+
+
+If you are interested in playing the full Quake 2 game (singleplayer), you need
+to buy Quake 2. From the Quake 2 installation, copy pak0.pak to ~/nquake2/baseq2/.
+
+Thank you for downloading nQuake2
+-
+2014-03-17
