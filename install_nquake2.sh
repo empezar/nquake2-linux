@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# nQuake2 Bash Installer Script v0.1 beta (for Linux)
+# nQuake2 Bash Installer Script v1.0 (for Linux)
 # by Empezar
 
 # Check if unzip is installed
@@ -29,8 +29,8 @@ function distdl {
 }
 
 echo
-echo "Welcome to the nQuake2 v0.1 beta installation"
-echo "============================================="
+echo "Welcome to the nQuake2 v1.0 installation"
+echo "========================================"
 echo
 echo "Press ENTER to use [default] option."
 echo
@@ -247,33 +247,25 @@ mv $directory/Install/Data/baseq2/pak0.pak $directory/baseq2/pak0.pak 2> /dev/nu
 rm -rf "$directory/Install"
 echo "done"
 echo -n "* Removing trash files..."
-rm -rf "$directory/DOCS"
-rm -rf "$directory/rogue"
-rm -rf "$directory/xatrix"
-rm "$directory/baseq2/maps.lst"
-rm "$directory/3.20_Changes.txt"
-rm "$directory/quake2.exe"
-rm "$directory/ref_soft.dll"
-rm "$directory/ref_gl.dll"
+rm -rf $directory/DOCS $directory/rogue $directory/xatrix
+rm $directory/baseq2/maps.lst $directory/3.20_Changes.txt $directory/quake2.exe $directory/ref_soft.dll $directory/ref_gl.dll
 echo "done"
 # Remove the Windows specific files
 echo -n "* Removing Windows specific binaries..."
-rm -rf $directory/q2pro.exe $directory/qsb.exe
+rm -rf $directory/q2pro.exe $directory/qsb.exe $directory/baseq2/gamex86.dll
 echo "done"
 # Set architecture
 echo -n "* Setting architecture..."
 binary=`uname -i`
 if [ "$binary" = "x86_64" ]
 then
-	# Keep 64-bit, remove 32-bit
-	rm $directory/q2pro-linux-x86 2> /dev/null
-	rm $directory/baseq2/basei386.so 2> /dev/null
+	unzip -qqo x64.zip 2> /dev/null
 	mv $directory/q2pro-linux-x86_64 $directory/q2pro
+	rm x86.zip
 else
-	# Keep 32-bit, remove 64-bit
-	rm $directory/q2pro-linux-x86_64 2> /dev/null
-	rm $directory/baseq2/basex86_64.so 2> /dev/null
+	unzip -qqo x86.zip 2> /dev/null
 	mv $directory/q2pro-linux-x86 $directory/q2pro
+	rm x64.zip
 fi
 echo "done"
 # Remove distribution files
