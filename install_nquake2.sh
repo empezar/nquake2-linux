@@ -207,7 +207,7 @@ fi
 
 # Extract all the packages
 echo "=== Installing ==="
-echo -n "* Extracting Quake 2 demo..."
+echo -n "* Extracting Quake 2 v3.14 demo..."
 unzip -qqo q2-314-demo-x86.zip Install/Data/baseq2/pak0.pak 2> /dev/null;echo "done"
 echo -n "* Extracting Quake 2 v3.20 point release..."
 unzip -qqo q2-3.20-x86-full_3.zip 2> /dev/null;echo "done"
