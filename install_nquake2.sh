@@ -78,9 +78,6 @@ echo
 
 # Ask for addons
 echo "=== Addons ==="
-ctf="n"
-eraser="n"
-textures="n"
 read -p "Do you want to install the Capture The Flag addon? (y/n) [n]: " ctf
 read -p "Do you want to install the Eraser Bot addon? (y/n) [n]: " eraser
 read -p "Do you want to install the High Resolution Textures addon? (y/n) [n]: " textures
@@ -154,46 +151,46 @@ echo
 # Download all the packages
 echo "=== Downloading ==="
 distdl $mirror q2-314-demo-x86.zip
-if [ "$error" == false ]
+if [ "$error" = false ]
 then
 	distdl $mirror q2-3.20-x86-full_3.zip
 fi
-if [ "$error" == false ]
+if [ "$error" = false ]
 then
 	distdl $mirror nquake2-gpl.zip
 fi
-if [ "$error" == false ]
+if [ "$error" = false ]
 then
 	distdl $mirror nquake2-non-gpl.zip
 fi
-if [ "$error" == false ]
+if [ "$error" = false ]
 then
 	distdl $mirror nquake2-linux.zip
 fi
-if [ "$error" == false ]
+if [ "$error" = false ]
 then
-	if [ "$ctf" != "n" ]
+	if [ "$ctf" = "y" ]
 	then
 		distdl $mirror nquake2-addon-ctf.zip
 	fi
 fi
-if [ "$error" == false ]
+if [ "$error" = false ]
 then
-	if [ "$eraser" != "n" ]
+	if [ "$eraser" = "y" ]
 	then
 		distdl $mirror nquake2-addon-eraser.zip
 	fi
 fi
-if [ "$error" == false ]
+if [ "$error" = false ]
 then
-	if [ "$textures" != "n" ]
+	if [ "$textures" = "y" ]
 	then
 		distdl $mirror nquake2-addon-textures.zip
 	fi
 fi
 
 # Terminate installation if not all packages were downloaded
-if [ "$error" == true ]
+if [ "$error" = true ]
 then
 	echo "=== Installation Failed ==="
 	echo "Error: Some distribution files failed to download. Better luck next time. Exiting."
@@ -220,17 +217,17 @@ echo -n "* Extracting nQuake2 setup files (2 of 2)..."
 unzip -qqo nquake2-non-gpl.zip 2> /dev/null;echo "done"
 echo -n "* Extracting nQuake2 Linux files..."
 unzip -qqo nquake2-linux.zip 2> /dev/null;echo "done"
-if [ "$ctf" != "n" ]
+if [ "$ctf" = "y" ]
 then
 	echo -n "* Extracting Capture The Flag addon..."
 	unzip -qqo nquake2-addon-ctf.zip 2> /dev/null;echo "done"
 fi
-if [ "$eraser" != "n" ]
+if [ "$eraser" = "y" ]
 then
 	echo -n "* Extracting Eraser Bot addon..."
 	unzip -qqo nquake2-addon-eraser.zip 2> /dev/null;echo "done"
 fi
-if [ "$textures" != "n" ]
+if [ "$textures" = "y" ]
 then
 	echo -n "* Extracting High Resolution Textures addon..."
 	unzip -qqo nquake2-addon-textures.zip 2> /dev/null;echo "done"
@@ -266,7 +263,7 @@ echo "done"
 # Set architecture
 echo -n "* Setting architecture..."
 binary=`uname -i`
-if [ "$binary" == "x86_64" ]
+if [ "$binary" = "x86_64" ]
 then
 	# Keep 64-bit, remove 32-bit
 	rm $directory/q2pro-linux-x86 2> /dev/null
