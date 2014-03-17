@@ -288,7 +288,7 @@ echo -n "* Setting permissions..."
 find $directory -type f -exec chmod -f 644 {} \;
 find $directory -type d -exec chmod -f 755 {} \;
 chmod -f +x $directory/q2pro 2> /dev/null
-chmod -f +x $directory/baseq2/base*.so 2> /dev/null
+chmod -f +x $directory/baseq2/game*.so 2> /dev/null
 echo "done"
 
 # Create an install_dir in ~/.nquake detailing where nQuake is installed
