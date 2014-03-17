@@ -29,13 +29,15 @@ function distdl {
 }
 
 echo
-echo Welcome to the nQuake2 v0.1 beta installation
-echo =======================================
+echo "Welcome to the nQuake2 v0.1 beta installation"
+echo "============================================="
 echo
-echo Press ENTER to use [default] option.
+echo "Press ENTER to use [default] option."
 echo
 
 # Create the nQuake2 folder
+echo "=== Installation Directory ==="
+echo
 defaultdir="~/nquake2"
 read -p "Where do you want to install nQuake2? [$defaultdir]: " directory
 if [ "$directory" = "" ]
@@ -49,13 +51,15 @@ then
 	then
 		created=false
 	else
-		echo;echo "Error: You do not have write access to $directory. Exiting."
+		echo
+		echo "Error: You do not have write access to $directory. Exiting."
 		exit
 	fi
 else
 	if [ -e "$directory" ]
 	then
-		echo;echo "Error: $directory already exists and is a file, not a directory. Exiting."
+		echo
+		echo "Error: $directory already exists and is a file, not a directory. Exiting."
 		exit
 	else
 		mkdir -p $directory 2> /dev/null
@@ -67,23 +71,24 @@ then
 	cd $directory
 	directory=$(pwd)
 else
-	echo;echo "Error: You do not have write access to $directory. Exiting."
+	echo
+	echo "Error: You do not have write access to $directory. Exiting."
 	exit
 fi
+echo
 
 # Ask for addons
+echo "=== Addons ==="
 ctf="n"
 eraser="n"
 textures="n"
-echo
 read -p "Do you want to install the Capture The Flag addon? (y/N): " ctf
-echo
 read -p "Do you want to install the Eraser Bot addon? (y/N): " eraser
-echo
 read -p "Do you want to install the High Resolution Textures addon? (y/N): " textures
 echo
 
 # Search for pak0.pak
+echo "=== Full Game ==="
 defaultsearchdir="~/"
 pak=""
 read -p "Do you want setup to search for pak0.pak? (y/N): " search
@@ -98,9 +103,11 @@ then
 	pak=$(echo $(find $path -type f -iname "pak0.pak" -size 176M -exec echo {} \; 2> /dev/null) | cut -d " " -f1)
 	if [ "$pak" != "" ]
 	then
-		echo;echo "* Found at location $pak"
+		echo
+		echo "* Found at location $pak"
 	else
-		echo;echo "* Could not find pak0.pak"
+		echo
+		echo "* Could not find pak0.pak"
 	fi
 fi
 echo
@@ -111,10 +118,12 @@ if [ -s "nquake2.ini" ]
 then
 	echo foo >> /dev/null
 else
+	echo "=== Installation Failed ==="
 	echo "Error: Could not download nquake2.ini. Better luck next time. Exiting."
 	if [ "$created" = true ]
 	then
 		cd
+		echo
 		read -p "The directory $directory is about to be removed, press Enter to confirm or CTRL+C to exit." remove
 		rm -rf $directory
 	fi
@@ -122,6 +131,7 @@ else
 fi
 
 # List all the available mirrors
+echo "=== Mirror Selection ==="
 echo "From what mirror would you like to download nQuake2?"
 grep "[0-9]\{1,2\}=\".*" nquake2.ini | cut -d "\"" -f2 | nl
 read -p "Enter mirror number [random]: " mirror
@@ -140,10 +150,10 @@ then
 	echo "$mirrorname"
 fi
 mkdir -p baseq2
-echo;echo
+echo
 
 # Download all the packages
-echo "=== Downloading ==="
+echo "=== Downloading Setup Files ==="
 distdl $mirror q2-314-demo-x86.zip
 if [ "$error" == false ]
 then
@@ -186,11 +196,13 @@ fi
 # Terminate installation if not all packages were downloaded
 if [ "$error" == true ]
 then
+	echo "=== Installation Failed ==="
 	echo "Error: Some distribution files failed to download. Better luck next time. Exiting."
 	rm -rf $directory/q2-314-demo-x86.zip $directory/q2-3.20-x86-full_3.zip $directory/nquake2-gpl.zip $directory/nquake2-non-gpl.zip $directory/nquake2-linux.zip $directory/nquake2-addon-ctf.zip $directory/nquake2-addon-eraser.zip $directory/nquake2-addon-textures.zip $directory/nquake2.ini
 	if [ "$created" = true ]
 	then
 		cd
+		echo
 		read -p "The directory $directory is about to be removed, press Enter to confirm or CTRL+C to exit." remove
 		rm -rf $directory
 	fi
@@ -198,7 +210,7 @@ then
 fi
 
 # Extract all the packages
-echo "=== Installing ==="
+echo "=== Installing nQuake2 ==="
 echo -n "* Extracting Quake 2 demo..."
 unzip -qqo q2-314-demo-x86.zip Install/Data/baseq2/pak0.pak 2> /dev/null;echo "done"
 echo -n "* Extracting Quake 2 v3.20 point release..."
@@ -231,8 +243,9 @@ then
 fi
 echo
 
+# Cleanup
+echo "=== Cleanup Phase ==="
 # Rename files
-echo "=== Cleaning up ==="
 echo -n "* Renaming files..."
 mv $directory/Install/Data/baseq2/pak0.pak $directory/baseq2/pak0.pak 2> /dev/null
 rm -rf "$directory/Install"
@@ -247,12 +260,10 @@ rm "$directory/quake2.exe"
 rm "$directory/ref_soft.dll"
 rm "$directory/ref_gl.dll"
 echo "done"
-
 # Remove the Windows specific files
 echo -n "* Removing Windows specific binaries..."
 rm -rf $directory/q2pro.exe $directory/qsb.exe
 echo "done"
-
 # Set architecture
 echo -n "* Setting architecture..."
 binary=`uname -i`
@@ -269,12 +280,10 @@ else
 	mv $directory/q2pro-linux-x86 $directory/q2pro
 fi
 echo "done"
-
 # Remove distribution files
 echo -n "* Removing distribution files..."
 rm -rf $directory/q2-314-demo-x86.zip $directory/q2-3.20-x86-full_3.zip $directory/nquake2-gpl.zip $directory/nquake2-non-gpl.zip $directory/nquake2-linux.zip $directory/nquake2-addon-ctf.zip $directory/nquake2-addon-eraser.zip $directory/nquake2-addon-textures.zip $directory/nquake2.ini
 echo "done"
-
 # Convert DOS files to UNIX
 echo -n "* Converting DOS files to UNIX..."
 for file in $directory/*.txt $directory/action/*.ini $directory/action/*.txt $directory/baseq2/*.txt $directory/baseq2/q2pro.menu  $directory/eraser/*.txt
@@ -286,7 +295,6 @@ do
 	fi
 done
 echo "done"
-
 # Set the correct permissions
 echo -n "* Setting permissions..."
 find $directory -type f -exec chmod -f 644 {} \;
@@ -300,4 +308,7 @@ mkdir -p ~/.nquake2
 rm -rf ~/.nquake2/install_dir
 echo $directory >> ~/.nquake2/install_dir
 
-echo;echo "Installation complete. Happy gibbing!"
+echo
+echo "=== Installation Complete ==="
+echo "nQuake2 was successfully installed. Happy gibbing!"
+echo
