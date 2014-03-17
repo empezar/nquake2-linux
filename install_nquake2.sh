@@ -17,14 +17,14 @@ function distdl {
 	wget --inet4-only -O $2 $1/$2
 	if [ -s $2 ]
 	then
-			if [ "$(du $2 | cut -f1)" \> "0" ]
-			then
-					error=false
-			else
-					error=true
-			fi
-	else
+		if [ "$(du $2 | cut -f1)" \> "0" ]
+		then
+			error=false
+		else
 			error=true
+		fi
+	else
+		error=true
 	fi
 }
 
@@ -40,7 +40,7 @@ defaultdir="~/nquake2"
 read -p "Where do you want to install nQuake2? [$defaultdir]: " directory
 if [ "$directory" = "" ]
 then
-        directory=$defaultdir
+	directory=$defaultdir
 fi
 eval directory=$directory
 if [ -d "$directory" ]
@@ -112,12 +112,12 @@ then
 	echo foo >> /dev/null
 else
 	echo "Error: Could not download nquake2.ini. Better luck next time. Exiting."
-        if [ "$created" = true ]
-        then
-                cd
-				read -p "The directory $directory is about to be removed, press Enter to confirm or CTRL+C to exit." remove
-                rm -rf $directory
-        fi
+	if [ "$created" = true ]
+	then
+		cd
+		read -p "The directory $directory is about to be removed, press Enter to confirm or CTRL+C to exit." remove
+		rm -rf $directory
+	fi
 	exit
 fi
 
@@ -157,7 +157,6 @@ if [ "$error" == false ]
 then
 	distdl $mirror nquake2-non-gpl.zip
 fi
-
 if [ "$error" == false ]
 then
 	distdl $mirror nquake2-linux.zip
@@ -280,8 +279,8 @@ for file in $directory/*.txt $directory/action/*.ini $directory/action/*.txt $di
 do
 	if [ -f "$file" ]
 	then
-	        awk '{ sub("\r$", ""); print }' $file > /tmp/.nquake2.tmp
-        	mv /tmp/.nquake2.tmp $file
+		awk '{ sub("\r$", ""); print }' $file > /tmp/.nquake2.tmp
+		mv /tmp/.nquake2.tmp $file
 	fi
 done
 echo "done"
