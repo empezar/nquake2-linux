@@ -256,9 +256,11 @@ if [ "$binary" == "x86_64" ]
 then
 	# Keep 64-bit, remove 32-bit
 	rm $directory/q2pro-linux-x86 2> /dev/null
+	rm $directory/baseq2/basei386.so 2> /dev/null
 else
 	# Keep 32-bit, remove 64-bit
 	rm $directory/q2pro-linux-x86_64 2> /dev/null
+	rm $directory/baseq2/basex86_64.so 2> /dev/null
 fi
 echo "done"
 
@@ -284,6 +286,7 @@ echo -n "* Setting permissions..."
 find $directory -type f -exec chmod -f 644 {} \;
 find $directory -type d -exec chmod -f 755 {} \;
 chmod -f +x $directory/q2pro-linux-x86* 2> /dev/null
+chmod -f +x $directory/baseq2/base*.so 2> /dev/null
 echo "done"
 
 # Create an install_dir in ~/.nquake detailing where nQuake is installed
