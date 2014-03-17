@@ -261,16 +261,14 @@ if [ "$binary" = "x86_64" ]
 then
 	unzip -qqo x64.zip 2> /dev/null
 	mv $directory/q2pro-linux-x86_64 $directory/q2pro
-	rm x86.zip
 else
 	unzip -qqo x86.zip 2> /dev/null
 	mv $directory/q2pro-linux-x86 $directory/q2pro
-	rm x64.zip
 fi
 echo "done"
 # Remove distribution files
 echo -n "* Removing distribution files..."
-rm -rf $directory/q2-314-demo-x86.zip $directory/q2-3.20-x86-full_3.zip $directory/nquake2-gpl.zip $directory/nquake2-non-gpl.zip $directory/nquake2-linux.zip $directory/nquake2-addon-ctf.zip $directory/nquake2-addon-eraser.zip $directory/nquake2-addon-textures.zip $directory/nquake2.ini
+rm -rf $directory/q2-314-demo-x86.zip $directory/q2-3.20-x86-full_3.zip $directory/nquake2-gpl.zip $directory/nquake2-non-gpl.zip $directory/nquake2-linux.zip $directory/nquake2-addon-ctf.zip $directory/nquake2-addon-eraser.zip $directory/nquake2-addon-textures.zip $directory/x64.zip $directory/x86.zip $directory/nquake2.ini
 echo "done"
 # Convert DOS files to UNIX
 echo -n "* Converting DOS files to UNIX..."
