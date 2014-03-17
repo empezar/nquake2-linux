@@ -37,7 +37,6 @@ echo
 
 # Create the nQuake2 folder
 echo "=== Installation Directory ==="
-echo
 defaultdir="~/nquake2"
 read -p "Where do you want to install nQuake2? [$defaultdir]: " directory
 if [ "$directory" = "" ]
@@ -82,16 +81,16 @@ echo "=== Addons ==="
 ctf="n"
 eraser="n"
 textures="n"
-read -p "Do you want to install the Capture The Flag addon? (y/N): " ctf
-read -p "Do you want to install the Eraser Bot addon? (y/N): " eraser
-read -p "Do you want to install the High Resolution Textures addon? (y/N): " textures
+read -p "Do you want to install the Capture The Flag addon? (y/n) [n]: " ctf
+read -p "Do you want to install the Eraser Bot addon? (y/n) [n]: " eraser
+read -p "Do you want to install the High Resolution Textures addon? (y/n) [n]: " textures
 echo
 
 # Search for pak0.pak
 echo "=== Full Game ==="
 defaultsearchdir="~/"
 pak=""
-read -p "Do you want setup to search for pak0.pak? (y/N): " search
+read -p "Do you want setup to search for pak0.pak? (y/n) [n]: " search
 if [ "$search" = "y" ]
 then
 	read -p "Enter path to search for pak0.pak [$defaultsearchdir]: " path
@@ -131,7 +130,7 @@ else
 fi
 
 # List all the available mirrors
-echo "=== Mirror Selection ==="
+echo "=== Download Location ==="
 echo "From what mirror would you like to download nQuake2?"
 grep "[0-9]\{1,2\}=\".*" nquake2.ini | cut -d "\"" -f2 | nl
 read -p "Enter mirror number [random]: " mirror
@@ -153,7 +152,7 @@ mkdir -p baseq2
 echo
 
 # Download all the packages
-echo "=== Downloading Setup Files ==="
+echo "=== Downloading ==="
 distdl $mirror q2-314-demo-x86.zip
 if [ "$error" == false ]
 then
@@ -210,7 +209,7 @@ then
 fi
 
 # Extract all the packages
-echo "=== Installing nQuake2 ==="
+echo "=== Installing ==="
 echo -n "* Extracting Quake 2 demo..."
 unzip -qqo q2-314-demo-x86.zip Install/Data/baseq2/pak0.pak 2> /dev/null;echo "done"
 echo -n "* Extracting Quake 2 v3.20 point release..."
@@ -244,7 +243,7 @@ fi
 echo
 
 # Cleanup
-echo "=== Cleanup Phase ==="
+echo "=== Cleaning up ==="
 # Rename files
 echo -n "* Renaming files..."
 mv $directory/Install/Data/baseq2/pak0.pak $directory/baseq2/pak0.pak 2> /dev/null
