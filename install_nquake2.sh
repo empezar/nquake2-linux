@@ -157,6 +157,11 @@ if [ "$error" == false ]
 then
 	distdl $mirror nquake2-non-gpl.zip
 fi
+
+if [ "$error" == false ]
+then
+	distdl $mirror nquake2-linux.zip
+fi
 if [ "$error" == false ]
 then
 	if [ "$ctf" != "n" ]
