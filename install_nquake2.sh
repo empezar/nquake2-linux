@@ -14,7 +14,7 @@ fi
 # Download function
 error=false
 function distdl {
-	wget --inet4-only -O $file $1/$2
+	wget --inet4-only -O $2 $1/$2
 	if [ -s $2 ]
 	then
 			if [ "$(du $2 | cut -f1)" \> "0" ]
@@ -75,17 +75,18 @@ fi
 ctf="n"
 eraser="n"
 textures="n"
-read -p "Do you want to install the CTF addon? (y/n) [n]: " ctf
 echo
-read -p "Do you want to install the Eraser Bot addon? (y/n) [n]: " eraser
+read -p "Do you want to install the Capture The Flag addon? (y/N): " ctf
 echo
-read -p "Do you want to install the high resolution textures addon? (y/n) [n]: " textures
+read -p "Do you want to install the Eraser Bot addon? (y/N): " eraser
+echo
+read -p "Do you want to install the High Resolution Textures addon? (y/N): " textures
 echo
 
 # Search for pak0.pak
 defaultsearchdir="~/"
 pak=""
-read -p "Do you want setup to search for pak0.pak? (y/n) [n]: " search
+read -p "Do you want setup to search for pak0.pak? (y/N): " search
 if [ "$search" = "y" ]
 then
 	read -p "Enter path to search for pak0.pak [$defaultsearchdir]: " path
@@ -127,16 +128,16 @@ read -p "Enter mirror number [random]: " mirror
 mirror=$(grep "^$mirror=[fhtp]\{3,4\}://[^ ]*$" nquake2.ini | cut -d "=" -f2)
 if [ "$mirror" = "" ]
 then
-        echo;echo -n "* Using mirror: "
-        RANGE=$(expr$(grep "[0-9]\{1,2\}=\".*" nquake2.ini | cut -d "\"" -f2 | nl | tail -n1 | cut -f1) + 1)
-        while [ "$mirror" = "" ]
-        do
-                number=$RANDOM
-                let "number %= $RANGE"
-                mirror=$(grep "^$number=[fhtp]\{3,4\}://[^ ]*$" nquake2.ini | cut -d "=" -f2)
-				mirrorname=$(grep "^$number=\".*" nquake2.ini | cut -d "\"" -f2)
-        done
-        echo "$mirrorname"
+	echo;echo -n "* Using mirror: "
+	RANGE=$(expr$(grep "[0-9]\{1,2\}=\".*" nquake2.ini | cut -d "\"" -f2 | nl | tail -n1 | cut -f1) + 1)
+	while [ "$mirror" = "" ]
+	do
+		number=$RANDOM
+		let "number %= $RANGE"
+		mirror=$(grep "^$number=[fhtp]\{3,4\}://[^ ]*$" nquake2.ini | cut -d "=" -f2)
+		mirrorname=$(grep "^$number=\".*" nquake2.ini | cut -d "\"" -f2)
+	done
+	echo "$mirrorname"
 fi
 mkdir -p baseq2
 echo;echo
@@ -182,7 +183,7 @@ fi
 if [ "$error" == true ]
 then
 	echo "Error: Some distribution files failed to download. Better luck next time. Exiting."
-	rm -rf $directory/q2-314-demo-x86.zip $directory/q2-3.20-x86-full_3.zip $directory/nquake2-gpl.zip $directory/nquake2-non-gpl.zip $directory/nquake2-addon-ctf.zip $directory/nquake2-addon-eraser.zip $directory/nquake2-addon-textures.zip
+	rm -rf $directory/q2-314-demo-x86.zip $directory/q2-3.20-x86-full_3.zip $directory/nquake2-gpl.zip $directory/nquake2-non-gpl.zip $directory/nquake2-linux.zip $directory/nquake2-addon-ctf.zip $directory/nquake2-addon-eraser.zip $directory/nquake2-addon-textures.zip $directory/nquake2.ini
 	if [ "$created" = true ]
 	then
 		cd
@@ -198,38 +199,54 @@ echo -n "* Extracting Quake 2 demo..."
 unzip -qqo q2-314-demo-x86.zip Install/Data/baseq2/pak0.pak 2> /dev/null;echo "done"
 echo -n "* Extracting Quake 2 v3.20 point release..."
 unzip -qqo q2-3.20-x86-full_3.zip 2> /dev/null;echo "done"
-echo -n "* Extracting nQuake setup files (2 of 2)..."
-unzip -qqo non-gpl.zip 2> /dev/null;echo "done"
-echo -n "* Extracting nQuake Linux files..."
-unzip -qqo linux.zip 2> /dev/null;echo "done"
+echo -n "* Extracting nQuake2 setup files (1 of 2)..."
+unzip -qqo nquake2-gpl.zip 2> /dev/null;echo "done"
+echo -n "* Extracting nQuake2 setup files (2 of 2)..."
+unzip -qqo nquake2-non-gpl.zip 2> /dev/null;echo "done"
+echo -n "* Extracting nQuake2 Linux files..."
+unzip -qqo nquake2-linux.zip 2> /dev/null;echo "done"
+if [ "$ctf" != "n" ]
+then
+	echo -n "* Extracting Capture The Flag addon..."
+	unzip -qqo nquake2-addon-ctf.zip 2> /dev/null;echo "done"
+fi
+if [ "$eraser" != "n" ]
+then
+	echo -n "* Extracting Eraser Bot addon..."
+	unzip -qqo nquake2-addon-eraser.zip 2> /dev/null;echo "done"
+fi
+if [ "$textures" != "n" ]
+then
+	echo -n "* Extracting High Resolution Textures addon..."
+	unzip -qqo nquake2-addon-textures.zip 2> /dev/null;echo "done"
+fi
 if [ "$pak" != "" ]
 then
-	echo -n "* Copying pak1.pak..."
-	cp $pak $directory/id1/pak1.pak 2> /dev/null;echo "done"
-	rm -rf $directory/id1/gpl-maps.pk3 $directory/id1/readme.txt
+	echo -n "* Copying pak0.pak..."
+	cp $pak $directory/baseq2/pak0.pak 2> /dev/null;echo "done"
 fi
 echo
 
 # Rename files
 echo "=== Cleaning up ==="
-echo -n "* Removing trash files..."
-rm -rf "$directory\DOCS"
-rm -rf "$directory\rogue"
-rm -rf "$directory\xatrix"
-rm "$directory\baseq2\maps.lst"
-rm "$directory\3.20_Changes.txt"
-rm "$directory\quake2.exe"
-rm "$directory\ref_soft.dll"
-rm "$directory\ref_gl.dll"
 echo -n "* Renaming files..."
-#mv $directory/ID1/PAK0.PAK $directory/id1/pak0.pak 2> /dev/null
-#mv $directory/ezquake/sb/update_sources.bat $directory/ezquake/sb/update_sources
-#rm -rf $directory/ID1
+mv $directory/Install/Data/baseq2/pak0.pak $directory/baseq2/pak0.pak 2> /dev/null
+rm -rf "$directory/Install"
+echo "done"
+echo -n "* Removing trash files..."
+rm -rf "$directory/DOCS"
+rm -rf "$directory/rogue"
+rm -rf "$directory/xatrix"
+rm "$directory/baseq2/maps.lst"
+rm "$directory/3.20_Changes.txt"
+rm "$directory/quake2.exe"
+rm "$directory/ref_soft.dll"
+rm "$directory/ref_gl.dll"
 echo "done"
 
 # Remove the Windows specific files
 echo -n "* Removing Windows specific binaries..."
-#rm -rf $directory/ezquake-gl.exe $directory/ezquake/sb/wget.exe
+rm -rf $directory/q2pro.exe $directory/qsb.exe
 echo "done"
 
 # Set architecture
@@ -237,21 +254,22 @@ echo -n "* Setting architecture..."
 binary=`uname -i`
 if [ "$binary" == "x86_64" ]
 then
-	#unzip -qqo $directory/x64.zip 2> /dev/null
+	# Keep 64-bit, remove 32-bit
+	rm $directory/q2pro-linux-x86 2> /dev/null
 else
-    #unzip -qqo $directory/x86.zip 2> /dev/null
+	# Keep 32-bit, remove 64-bit
+	rm $directory/q2pro-linux-x86_64 2> /dev/null
 fi
 echo "done"
 
 # Remove distribution files
 echo -n "* Removing distribution files..."
-rm -rf $directory/q2-314-demo-x86.zip $directory/q2-3.20-x86-full_3.zip $directory/nquake2-gpl.zip $directory/nquake2-non-gpl.zip $directory/nquake2-addon-ctf.zip $directory/nquake2-addon-eraser.zip $directory/nquake2-addon-textures.zip
+rm -rf $directory/q2-314-demo-x86.zip $directory/q2-3.20-x86-full_3.zip $directory/nquake2-gpl.zip $directory/nquake2-non-gpl.zip $directory/nquake2-linux.zip $directory/nquake2-addon-ctf.zip $directory/nquake2-addon-eraser.zip $directory/nquake2-addon-textures.zip $directory/nquake2.ini
 echo "done"
 
 # Convert DOS files to UNIX
 echo -n "* Converting DOS files to UNIX..."
-#for file in $directory/readme.txt $directory/id1/readme.txt $directory/ezquake/cfg/* $directory/ezquake/configs/* $directory/ezquake/sb/* $directory/ezquake/gnu.txt
-for file in $directory/*.txt
+for file in $directory/*.txt $directory/action/*.ini $directory/action/*.txt $directory/baseq2/*.txt $directory/baseq2/q2pro.menu  $directory/eraser/*.txt
 do
 	if [ -f "$file" ]
 	then
@@ -265,7 +283,7 @@ echo "done"
 echo -n "* Setting permissions..."
 find $directory -type f -exec chmod -f 644 {} \;
 find $directory -type d -exec chmod -f 755 {} \;
-#chmod -f +x $directory/ezquake-gl.glx 2> /dev/null
+chmod -f +x $directory/q2pro-linux-x86* 2> /dev/null
 echo "done"
 
 # Create an install_dir in ~/.nquake detailing where nQuake is installed
